@@ -82,6 +82,12 @@ function pll_add_language($language_code, $language_order = 0, &$error_code = 0)
  */
 function pll_del_language($language_code) {
         $languages = pll_languages_list();
+
+        // are any languages available
+        if( !$languages) {
+            return false;
+        }
+
         foreach ($languages as $language) {
                 if ($language->slug == $language_code) {
                     $adminModel = new PLL_Admin_Model($polylang->options);
@@ -101,6 +107,12 @@ function pll_del_language($language_code) {
  */
 function pll_is_language_installed($language_code) {
 	$languages = pll_languages_list();
+
+    // are any languages available
+    if( !$languages) {
+        return false;
+    }
+
 	foreach ($languages as $language) {
 		if ($language->slug == $language_code) {
 			return true;
