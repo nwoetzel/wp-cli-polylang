@@ -24,3 +24,6 @@ Command added
     home           Gets the site homepage URL in the specified language
     language       Adds, gets information or remove a language
     languages      Prints the languages currently available
+    getlang        Get the language of a post or a term as slug
+    set            Sets a post or a term to the specified language
+    trans          Associate terms or post as translations
