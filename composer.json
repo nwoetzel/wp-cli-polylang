@@ -17,7 +17,8 @@
 		}, {
 			"name" : "Nils Woetzel",
 			"email" : "nils.woetzel@h-its.org",
-			"homepage" : "http://www.h-its.org"
+			"homepage" : "http://www.h-its.org",
+			"role" : "Developer"
 		}
 	],
 	"require" : {
@@ -29,5 +30,11 @@
 			"PolylangHelperFunctions.php",
 			"Polylang_Command.php"
 		]
-	}
+	},
+	"repositories" : [{
+			"type" : "git",
+			"url" : "https://github.com/nwoetzel/wp-cli-polylang",
+			"name" : "nwoetzel/wp-cli-polylang"
+		}
+	]
 }
