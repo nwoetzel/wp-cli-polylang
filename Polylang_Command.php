@@ -396,7 +396,7 @@ class Polylang_Command extends WP_CLI_Command {
         }
 
         // add the language switcher as new menu item
-        $menu_item_db_id = wp_update_nav_menu_item($menu_id, 0, array(
+        $menu_item_db_id = wp_update_nav_menu_item($nav_menu->term_id, 0, array(
                 'menu-item-title' => __('Language switcher', 'polylang'),
                 'menu-item-url' => '#pll_switcher',
                 'menu-item-status' => 'publish'
