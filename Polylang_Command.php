@@ -339,6 +339,84 @@ class Polylang_Command extends WP_CLI_Command {
                 WP_CLI::error("Unknown command: polylang language $args[0]. Expected: add/del/info.");
         }
     }
+
+    /**
+     * add the language switcher to a menu
+     *
+     * ## OPTIONS
+     *
+     * <menu_id>
+     * : the menu id, name or slug
+     *
+     * [--hide_if_no_translation=<boolean>]
+     * : hide the switcher, if no translation (for post/page) is available
+     * : Accepted values: 0, 1. Default: 0
+     *
+     * [--hide_current=<boolean>]
+     * : hide the current language
+     * : Accepted values: 0, 1. Default: 0
+     *
+     * [--force_home=<boolean>]
+     * : link to home (instead of translated post/page)
+     * : Accepted values: 0, 1. Default: 0
+     *
+     * [--show_flags=<boolean>]
+     * : show language flags
+     * : Accepted values: 0, 1. Default: 0
+     *
+     * [--show_names=<boolean>]
+     * : show language names
+     * : Accepted values: 0, 1. Default: 1
+     *
+     * ## EXAMPLES
+     *
+     *   wp polylang langswitcher 1
+     *
+     * @synopsis <menu_id> [--hide_if_no_translation=<boolean>] [--hide_current=<boolean>] [--force_home=<boolean>] [--show_flags=<boolean>] [--show_names=<boolean>]
+     */
+    function langswitcher ($args, $assocArgs) {
+        $menu_id = $args[0];
+        // check if the menu exists
+        $nav_menu = wp_get_nav_menu_object( $args[0] );
+
+        if( false === $nav_menu) {
+            WP_CLI::error( "Invalid menu " . $menu_id);
+        }
+
+        // handle options
+        $options = array('hide_if_no_translation' => 0, 'hide_current' => 0,'force_home' => 0 ,'show_flags' => 0 ,'show_names' => 1); // default values
+
+        foreach( $assocArgs as $key => $value) {
+            $options[$key] = $value;
+        }
+
+        // at least one needs to be activated
+        if( !$options['show_flags'] && !$options['show_names']) {
+            $options['show_names'] = 1;
+        }
+
+        // add the language switcher as new menu item
+        $menu_item_db_id = wp_update_nav_menu_item($menu_id, 0, array(
+                'menu-item-title' => __('Language switcher', 'polylang'),
+                'menu-item-url' => '#pll_switcher',
+                'menu-item-status' => 'publish'
+        ));
+
+        // check for success
+        if( is_wp_error($menu_item_db_id)) {
+            WP_CLI::error( "could not add language switcher: " . $menu_item_db_id->get_error_message());
+        }
+
+        // update the meta data, so that the Language switcher really behaves the desired way
+        if( !update_post_meta($menu_item_db_id, '_pll_menu_item', $options)) {
+            // cleanup
+            wp_delete_post( $menu_item_db_id);
+            WP_CLI::error( "error setting options for Language Switcher menu item");
+        }
+
+        // success
+        WP_CLI::success("Added language switcher with db_id: " . $menu_item_db_id);
+    }
 }
 
 WP_CLI::add_command('polylang', 'Polylang_Command');

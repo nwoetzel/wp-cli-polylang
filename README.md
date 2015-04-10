@@ -27,3 +27,4 @@ Command added
     getlang        Get the language of a post or a term as slug
     set            Sets a post or a term to the specified language
     trans          Associate terms or post as translations
+    langswitcher   add the language switcher to a menu
