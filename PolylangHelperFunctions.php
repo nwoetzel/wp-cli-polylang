@@ -65,10 +65,8 @@ function pll_is_valid_language_code($language_code) {
  * @param int &$error_code the error code, or 0 if the operation is succesful
  * @return bool true if the language has been added; false if an error has occured
  */
-function pll_add_language($language_code, $language_order = 0, &$error_code = 0) {
+function pll_add_language($language_code, $language_order = 0) {
 	global $polylang;
-
-	$adminModel = new PLL_Admin_Model($polylang->options);
 
 	$info = pll_get_default_language_information($language_code);
 
@@ -79,8 +77,7 @@ function pll_add_language($language_code, $language_order = 0, &$error_code = 0)
 		rtl => $info['rtl'] ? 1 : 0,
 		term_group => $language_order
 	);
-	$error_code = $adminModel->add_language($args);
-	return $error_code !== 0;
+	return $polylang->model->add_language($args);
 }
 
 /**
@@ -100,8 +97,7 @@ function pll_del_language($language_code) {
 
         foreach ($languages as $language) {
                 if ($language->slug == $language_code || $language->locale == $language_code) {
-                    $adminModel = new PLL_Admin_Model($polylang->options);
-                    $adminModel->delete_language((int) $language->term_id);
+                    $polylang->model->delete_language((int) $language->term_id);
                     return true;
                 }
         }
@@ -117,7 +113,7 @@ function pll_del_language($language_code) {
  */
 function pll_is_language_installed($language_code) {
 	$languages = pll_installed_language_list();
-	var_dump($languages);
+
 	// are any languages available
 	if( !$languages) {
 		return false;

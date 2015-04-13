@@ -15,6 +15,9 @@
 if (!defined('WP_CLI')) {
     return;
 }
+// define PLL_ADMIN and PLL_SETTINGS so that $polylang->model is initialized properly
+define('PLL_ADMIN',true);
+define('PLL_SETTINGS',true);
 
 require_once 'PolylangHelperFunctions.php';
 
@@ -34,8 +37,8 @@ class Polylang_Command extends WP_CLI_Command {
      */
     function languages ($args, $assocArgs) {
         $languages = pll_installed_language_list();
-        if ( !$languages || !count($languages)) {
-            WP_CLI::success("Less than two languages are currently configured.");
+        if ( !$languages) {
+            WP_CLI::success("No languages are currently configured.");
             return;
         }
 
@@ -313,7 +316,7 @@ class Polylang_Command extends WP_CLI_Command {
                     return;
                 }
 
-                if (pll_add_language($language_code, $language_order, $error_code)) {
+                if (pll_add_language($language_code, $language_order)) {
                     WP_CLI::success("Language added.");
                     return;
                 }
