@@ -33,7 +33,7 @@ class Polylang_Command extends WP_CLI_Command {
      * @synopsis
      */
     function languages ($args, $assocArgs) {
-        $languages = pll_languages_list();
+        $languages = pll_installed_language_list();
         if ( !$languages || !count($languages)) {
             WP_CLI::success("Less than two languages are currently configured.");
             return;
