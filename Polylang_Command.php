@@ -384,13 +384,15 @@ class Polylang_Command extends WP_CLI_Command {
         }
 
         // handle options
-        $options = array('hide_if_no_translation' => 0, 'hide_current' => 0,'force_home' => 0 ,'show_flags' => 0 ,'show_names' => 1); // default values
+        $options = wp_parse_args( $assocArgs, array(
+                   'hide_if_no_translation' => 0,
+                   'hide_current' => 0,
+                   'force_home' => 0,
+                   'show_flags' => 0,
+                   'show_names' => 1
+        ));
 
-        foreach( $assocArgs as $key => $value) {
-            $options[$key] = $value;
-        }
-
-        // at least one needs to be activated
+        // at least one needs to be activated - otherwise use default
         if( !$options['show_flags'] && !$options['show_names']) {
             $options['show_names'] = 1;
         }
